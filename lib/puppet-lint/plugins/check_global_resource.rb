@@ -6,6 +6,12 @@ PuppetLint.new_check(:global_resource) do
     class_indexes.each { |c| secure << [c[:start], c[:end]] }
     defined_type_indexes.each { |d| secure << [d[:start], d[:end]] }
 
+    # node_indexes will be in the next puppet-lint version
+    unless defined? node_indexes
+      node_indexes = PuppetLint::Data.definition_indexes(:NODE)
+    end
+    node_indexes.each { |n| secure << [n[:start], n[:end]] }
+
     resource_indexes.each do |r|
       encap = 0
       secure.each do |s|
