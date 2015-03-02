@@ -22,7 +22,7 @@ PuppetLint.new_check(:global_resource) do
       next if encap == 1
 
       notify(:error, {
-        :message => "Resource #{r[:type].value} in global space.",
+        :message => "Resource #{r[:type].value} in global space",
         :line => r[:type].line,
         :column => r[:type].column,
       })
