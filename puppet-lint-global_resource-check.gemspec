@@ -2,7 +2,7 @@ Gem::Specification.new do |spec|
   spec.name        = 'puppet-lint-global_resource-check'
   spec.version     = '0.1.0'
   spec.homepage    = 'https://github.com/ninech/puppet-lint-global_resource-check'
-  spec.license     = ''
+  spec.license     = 'MIT'
   spec.author      = 'Marius Rieder'
   spec.email       = 'marius.rieder@nine.ch'
   spec.files       = Dir[
