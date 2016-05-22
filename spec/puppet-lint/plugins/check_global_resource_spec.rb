@@ -35,7 +35,7 @@ describe 'global_resource' do
   end
 
   context 'global includes' do
-    let(:code) { "include class" }
+    let(:code) { "class test { file { 'file': } } \ninclude class" }
 
     it 'should detect a problem' do
         expect(problems).to have(1).problems

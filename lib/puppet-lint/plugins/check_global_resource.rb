@@ -28,6 +28,25 @@ PuppetLint.new_check(:global_resource) do
       })
     end
 
+    tokens.each_index do |i|
+      token = tokens[i]
+      next unless token.type = :NAME and token.value == 'include'
+
+      encap= 0
+      secure.each do |s|
+        if s[0] < i and s[1] > i
+          encap = 1
+        end
+      end
+      next if encap == 1
+
+      notify(:error, {
+        :message => "include #{token.next_code_token.value} in global space",
+        :line => token.line,
+        :column => token.column,
+      })
+    end
+
   end
 
 end
