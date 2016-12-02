@@ -1,5 +1,7 @@
 # puppet-lint global resource check
 
+[![Build Status](https://travis-ci.org/ninech/puppet-lint-global_resource-check.svg?branch=master)](https://travis-ci.org/ninech/puppet-lint-global_resource-check)
+
 ## Installation
 
 To use this plugin, add the following like to the Gemfile in your Puppet code
