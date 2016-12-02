@@ -25,7 +25,7 @@ PuppetLint.new_check(:global_resource) do
 
     tokens.each_index do |i|
       token = tokens[i]
-      next unless token.type = :NAME and token.value == 'include'
+      next unless token.type == :NAME and token.value == 'include'
 
       encap= 0
       secure.each do |s|
