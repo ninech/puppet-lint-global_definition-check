@@ -6,7 +6,13 @@ To use this plugin, add the following like to the Gemfile in your Puppet code
 base and run `bundle install`.
 
 ```ruby
-gem 'puppet-lint-global_resource-check'
+gem 'puppet-lint-global_resource-check', '~> '0.3.0'
+```
+
+For puppet-lint version 1.1
+
+```ruby
+gem 'puppet-lint-global_resource-check', '~> '0.2.0'
 ```
 
 ## Usage
