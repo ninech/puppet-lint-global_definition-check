@@ -1,12 +1,6 @@
 require 'spec_helper'
 
 describe 'global_resource' do
-
-  before do
-    # Bugfix/Workaround for https://github.com/rodjek/puppet-lint/pull/569
-    PuppetLint::Data.instance_variable_set '@node_indexes', nil
-  end
-  
   context 'just a class' do
     let(:code) { "class test { file { 'file': } }" }
     
