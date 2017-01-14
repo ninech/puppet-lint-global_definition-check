@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'global_resource' do
   context 'just a class' do
     let(:code) { "class test { file { 'file': } }" }
-    
+
     it 'should not detect any problems' do
       expect(problems).to have(0).problems
     end
@@ -26,7 +26,9 @@ describe 'global_resource' do
   end
 
   context 'global file' do
-    let(:code) { "file { 'file': } define test ($param = undef) { file { 'file': } }" }
+    let(:code) do
+      "file { 'file': } define test ($param = undef) { file { 'file': } }"
+    end
 
     it 'should detect a problem' do
       expect(problems).to have(1).problems
@@ -37,8 +39,7 @@ describe 'global_resource' do
     let(:code) { "class test { file { 'file': } } \ninclude class" }
 
     it 'should detect a problem' do
-        expect(problems).to have(1).problems
+      expect(problems).to have(1).problems
     end
   end
-
 end
