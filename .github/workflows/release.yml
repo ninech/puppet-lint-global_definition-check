@@ -10,6 +10,7 @@ on:
 permissions:
   contents: write
   actions: write
+  packages: write
 
 jobs:
   release:
@@ -33,9 +34,7 @@ jobs:
         with:
           ruby-version: 3.2
       - run: bundle install
-      - run: gem build *.gemspec
-        env:
-          CI_COMMIT_TAG: ${{github.ref_name}}
+      - run: CI_COMMIT_TAG=$(git describe --tags --abbrev=0) gem build *.gemspec
       - name: prepare gem credential
         run: |
           mkdir -p $HOME/.gem
