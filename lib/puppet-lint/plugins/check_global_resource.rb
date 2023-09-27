@@ -1,43 +1,50 @@
 PuppetLint.new_check(:global_resource) do
   def check
-    @secure = secure_ranges
-
     check_for_global_resources
-    check_for_global_includes
-  end
-
-  def secure_ranges
-    secure = []
-
-    class_indexes.each { |c| secure << [c[:start], c[:end]] }
-    defined_type_indexes.each { |d| secure << [d[:start], d[:end]] }
-    node_indexes.each { |n| secure << [n[:start], n[:end]] }
-
-    secure
+    check_for_global_token(:NAME, "include")
+    check_for_global_token(:FUNCTION_NAME)
   end
 
   def check_for_global_resources
     resource_indexes.each do |r|
-      next if @secure.any? { |s| s[0] < r[:start] && s[1] > r[:end] }
+      next if secure_ranges.any? { |s| s[0] < r[:start] && s[1] > r[:end] }
 
       notify :error,
-        message: "Resource #{r[:type].value} in global space",
+        message: "resource #{r[:type].value} in global space",
         line: r[:type].line,
         column: r[:type].column
     end
   end
 
-  def check_for_global_includes
-    tokens.each_index do |i|
-      token = tokens[i]
-      next unless token.type == :NAME && token.value == "include"
+  def check_for_global_token(type, value = nil)
+    global_tokens.each_with_index do |token, i|
+      next unless token.type == type
+      next unless value.nil? || token.value == value
 
-      next if @secure.any? { |s| s[0] < i && s[1] > i }
+      message = value.nil? ? token.value : "#{token.value} #{token.next_code_token.value}"
 
       notify :error,
-        message: "include #{token.next_code_token.value} in global space",
+        message: "token #{message} in global space",
         line: token.line,
         column: token.column
     end
+  end
+
+  private
+
+  def global_tokens
+    @global_tokens ||= tokens.reject.with_index { |_, i| secure_ranges.any? { |s| s[0] < i && s[1] > i } }
+  end
+
+  def secure_ranges
+    return @secure_ranges if @secure_ranges
+
+    @secure_ranges = []
+
+    class_indexes.each { |c| @secure_ranges << [c[:start], c[:end]] }
+    defined_type_indexes.each { |d| @secure_ranges << [d[:start], d[:end]] }
+    node_indexes.each { |n| @secure_ranges << [n[:start], n[:end]] }
+
+    @secure_ranges
   end
 end
