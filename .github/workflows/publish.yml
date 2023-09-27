@@ -1,9 +1,10 @@
-name: Ruby Gem
+name: publish
 
 on:
+  workflow_dispatch:
   push:
     tags:
-      - v*
+      - "*"
 
 permissions:
   packages: write
