@@ -1,14 +1,15 @@
 name: release
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
       - master
-  pull_request:
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   release:
@@ -21,3 +22,35 @@ jobs:
         with:
           allow-initial-development-versions: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: check if tag has been created
+        run: test -n "$(git tag --points-at HEAD)" || ( gh run cancel ${{ github.run_id }} && gh run watch ${{ github.run_id }} )
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2
+      - run: bundle install
+      - run: gem build *.gemspec
+        env:
+          CI_COMMIT_TAG: ${{github.ref_name}}
+      - name: prepare gem credential
+        run: |
+          mkdir -p $HOME/.gem
+          touch $HOME/.gem/credentials
+          chmod 0600 $HOME/.gem/credentials
+      - name: publish to GPR
+        run: |
+          printf -- "---\n:github: ${GEM_HOST_API_KEY}\n" > $HOME/.gem/credentials
+          gem push --KEY github --host https://rubygems.pkg.github.com/${OWNER} *.gem
+        env:
+          GEM_HOST_API_KEY: "Bearer ${{secrets.GITHUB_TOKEN}}"
+          OWNER: ${{ github.repository_owner }}
+      - name: publish to RubyGems
+        run: |
+          printf -- "---\n:rubygems_api_key: ${GEM_HOST_API_KEY}\n" > $HOME/.gem/credentials
+          gem push *.gem
+        env:
+          GEM_HOST_API_KEY: "${{secrets.RUBYGEMS_AUTH_TOKEN}}"
