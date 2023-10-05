@@ -2,7 +2,7 @@ module PuppetLintGlobalDefinionCheck
   private
 
   def check_for_global_token(type, value = nil)
-    global_tokens.each_with_index do |token, i|
+    global_tokens.each do |token|
       next unless token.type == type
       next unless value.nil? || token.value == value
 
