@@ -1,12 +1,12 @@
 module PuppetLintGlobalDefinionCheck
   private
 
-  def check_for_global_token(type, value = nil)
-    global_tokens.each_with_index do |token, i|
+  def check_for_global_token(type)
+    global_tokens.each do |token|
       next unless token.type == type
-      next unless value.nil? || token.value == value
 
-      message = value.nil? ? token.value : "#{token.value} #{token.next_code_token.value}"
+      message = yield(token)
+      next unless message
 
       notify :error,
         message: "definition #{message} in global space",
@@ -37,7 +37,9 @@ PuppetLint.new_check(:global_resource) do
 
   def check
     check_for_global_resources
-    check_for_global_token(:NAME, "include")
+    check_for_global_token(:NAME) do |token|
+      "#{token.value} #{token.next_code_token.value}" if token.value == "include"
+    end
   end
 
   def check_for_global_resources
@@ -56,6 +58,8 @@ PuppetLint.new_check(:global_function) do
   include PuppetLintGlobalDefinionCheck
 
   def check
-    check_for_global_token(:FUNCTION_NAME)
+    check_for_global_token(:FUNCTION_NAME) do |token|
+        "#{token.value} #{token.next_code_token.value}" unless !token.prev_code_token.nil? && token.prev_code_token.type == :FUNCTION
+    end
   end
 end

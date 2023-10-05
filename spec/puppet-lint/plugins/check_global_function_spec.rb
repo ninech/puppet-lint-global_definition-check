@@ -30,4 +30,26 @@ describe "global_function" do
       expect(problems).to have(1).problems
     end
   end
+
+  context "module function definition" do
+    let(:code) do
+      <<-EOS
+      # @summary function to clean hash of undef and empty values
+      function nine_networkinterfaces::delete_empty_values(
+        Hash $hash,
+      ) >> Hash {
+        $hash.filter |$key, $value| {
+          case $value {
+            Collection: { $value =~ NotUndef and !$value.empty }
+            default:    { $value =~ NotUndef }
+          }
+        }
+      }
+      EOS
+    end
+
+    it "should not detect any problems" do
+      expect(problems).to have(0).problems
+    end
+  end
 end
