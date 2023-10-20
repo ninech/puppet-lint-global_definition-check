@@ -31,19 +31,11 @@ describe "global_function" do
     end
   end
 
-  context "module function definition" do
+  context "custom function definition with function call" do
     let(:code) do
       <<-EOS
-      # @summary function to clean hash of undef and empty values
-      function nine_networkinterfaces::delete_empty_values(
-        Hash $hash,
-      ) >> Hash {
-        $hash.filter |$key, $value| {
-          case $value {
-            Collection: { $value =~ NotUndef and !$value.empty }
-            default:    { $value =~ NotUndef }
-          }
-        }
+      function test_module::test_function() >> Any {
+        function_call()
       }
       EOS
     end
