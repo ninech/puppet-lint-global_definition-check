@@ -11,7 +11,7 @@ describe "global_function" do
     end
 
     it "should not detect any problems" do
-      expect(problems).to have(0).problems
+      expect(problems.size).to eq(0)
     end
   end
 
@@ -27,7 +27,7 @@ describe "global_function" do
     end
 
     it "should detect a problem" do
-      expect(problems).to have(1).problems
+      expect(problems.size).to eq(1)
     end
   end
 
@@ -49,7 +49,7 @@ describe "global_function" do
     end
 
     it "should not detect any problems" do
-      expect(problems).to have(0).problems
+      expect(problems.size).to eq(0)
     end
   end
 end
