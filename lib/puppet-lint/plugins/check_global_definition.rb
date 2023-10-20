@@ -16,19 +16,19 @@ module PuppetLintGlobalDefinionCheck
   end
 
   def global_tokens
-    @global_tokens ||= tokens.reject.with_index { |_, i| secure_ranges.any? { |s| s[0] < i && s[1] > i } }
+    @global_tokens ||= tokens.reject.with_index { |_, i| safe_ranges.any? { |s| s[0] < i && s[1] > i } }
   end
 
-  def secure_ranges
-    return @secure_ranges if @secure_ranges
+  def safe_ranges
+    return @safe_ranges if @safe_ranges
 
-    @secure_ranges = []
+    @safe_ranges = []
 
-    class_indexes.each { |c| @secure_ranges << [c[:start], c[:end]] }
-    defined_type_indexes.each { |d| @secure_ranges << [d[:start], d[:end]] }
-    node_indexes.each { |n| @secure_ranges << [n[:start], n[:end]] }
+    class_indexes.each { |c| @safe_ranges << [c[:start], c[:end]] }
+    defined_type_indexes.each { |d| @safe_ranges << [d[:start], d[:end]] }
+    node_indexes.each { |n| @safe_ranges << [n[:start], n[:end]] }
 
-    @secure_ranges
+    @safe_ranges
   end
 end
 
@@ -44,7 +44,7 @@ PuppetLint.new_check(:global_resource) do
 
   def check_for_global_resources
     resource_indexes.each do |r|
-      next if secure_ranges.any? { |s| s[0] < r[:start] && s[1] > r[:end] }
+      next if safe_ranges.any? { |s| s[0] < r[:start] && s[1] > r[:end] }
 
       notify :error,
         message: "resource #{r[:type].value} in global space",
