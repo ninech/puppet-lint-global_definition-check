@@ -9,7 +9,7 @@ module PuppetLintGlobalDefinionCheck
       next unless message
 
       notify :error,
-        message: "definition #{message} in global space",
+        message: "#{message} in global space",
         line: token.line,
         column: token.column
     end
@@ -59,7 +59,7 @@ PuppetLint.new_check(:global_function) do
 
   def check
     check_for_global_token(:FUNCTION_NAME) do |token|
-        "#{token.value} #{token.next_code_token.value}" unless !token.prev_code_token.nil? && token.prev_code_token.type == :FUNCTION
+      "function call #{token.value}(...)" unless !token.prev_code_token.nil? && token.prev_code_token.type == :FUNCTION
     end
   end
 end
