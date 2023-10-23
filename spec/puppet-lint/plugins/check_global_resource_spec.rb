@@ -5,7 +5,7 @@ describe "global_resource" do
     let(:code) { "class test { file { 'file': } }" }
 
     it "should not detect any problems" do
-      expect(problems).to have(0).problems
+      expect(problems.size).to eq(0)
     end
   end
 
@@ -13,7 +13,7 @@ describe "global_resource" do
     let(:code) { "define test ($param = undef) { file { 'file': } }" }
 
     it "should not detect any problems" do
-      expect(problems).to have(0).problems
+      expect(problems.size).to eq(0)
     end
   end
 
@@ -21,7 +21,7 @@ describe "global_resource" do
     let(:code) { "node 'test' { file { 'file': } }" }
 
     it "should not detect any problems" do
-      expect(problems).to have(0).problems
+      expect(problems.size).to eq(0)
     end
   end
 
@@ -31,7 +31,7 @@ describe "global_resource" do
     end
 
     it "should detect a problem" do
-      expect(problems).to have(1).problems
+      expect(problems.size).to eq(1)
     end
   end
 
@@ -39,7 +39,7 @@ describe "global_resource" do
     let(:code) { "class test { file { 'file': } } \ninclude testclass" }
 
     it "should detect a problem" do
-      expect(problems).to have(1).problems
+      expect(problems.size).to eq(1)
     end
   end
 
@@ -53,7 +53,7 @@ describe "global_resource" do
     end
 
     it "should not detect any problems" do
-      expect(problems).to have(0).problems
+      expect(problems.size).to eq(0)
     end
   end
 end

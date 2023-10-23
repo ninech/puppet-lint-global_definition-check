@@ -16,7 +16,7 @@ Gem::Specification.new do |spec|
     Extends puppet-lint to ensure that your manifests have no global resources.
   EOF
 
-  spec.add_dependency "puppet-lint", "~> 2.1"
+  spec.add_dependency "puppet-lint", ">= 2.2", "< 5"
   spec.add_development_dependency "rspec", "~> 3.4"
   spec.add_development_dependency "rspec-its", "~> 1.3"
   spec.add_development_dependency "rspec-collection_matchers", "~> 1.2"
